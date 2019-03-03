@@ -18,6 +18,7 @@ import com.coolweather.android.db.City;
 import com.coolweather.android.db.County;
 import com.coolweather.android.db.Province;
 import com.coolweather.android.util.HttpUtil;
+import com.coolweather.android.util.LogUtil;
 import com.coolweather.android.util.Utility;
 
 import org.litepal.crud.DataSupport;
@@ -189,6 +190,8 @@ public class ChooseAreaFragment extends Fragment {
      * */
     private void queryFromServer(String address, final String type) {
         showProgressDialog();
+        LogUtil.d("soso", address);
+
         HttpUtil.sendOkHttpRequest(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -197,6 +200,7 @@ public class ChooseAreaFragment extends Fragment {
                     @Override
                     public void run() {
                         closeProgressDialog();
+                        LogUtil.e("errso",e.getMessage());
                         Toast.makeText(getContext(), "加载失败", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -205,6 +209,8 @@ public class ChooseAreaFragment extends Fragment {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseText = response.body().string();
+                LogUtil.d("sosoei", responseText);
+
                 boolean result = false;
                 if ("province".equals(type)) {
                     result = Utility.handleProvinceResponse(responseText);
